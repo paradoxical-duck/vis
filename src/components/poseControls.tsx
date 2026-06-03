@@ -27,27 +27,27 @@ export default function PoseControls(){
                 <Accordion type="single" collapsible defaultValue="item-1">
                     <AccordionItem value="item-1">
                     <AccordionTrigger>Pose 1</AccordionTrigger>
-                    <AccordionContent> 
+                    <AccordionContent className="flex h-full"> 
                         
                                 
 
                         <div className="flex flex-col gap-3">
                             
                             <div className="flex flex-col gap-1">
-                                    <FieldLabel htmlFor="pose-name" className="text-muted-foreground">
-                                        <p className="text-white">Pose name:</p>
+                                    <FieldLabel htmlFor="pose-name" className="text-muted-foreground text-white">
+                                        Pose name:
                                     </FieldLabel>
                                     <Input
                                     id="pose-name"
                                     type="text"
                                     placeholder="Pose"
-                                    className="w-fit" 
+                                    className="w-full" 
                                     />
                             </div>
 
                             <div className="flex flex-col gap-1">
-                                <FieldLabel htmlFor="x-input" className="text-muted-foreground">
-                                    <p className="text-white">x:</p>
+                                <FieldLabel htmlFor="x-input" className="text-muted-foreground  text-white">
+                                    x:
                                 </FieldLabel>
                                 <Input
                                 id="x-input"
@@ -58,8 +58,8 @@ export default function PoseControls(){
                             </div>
                        
                             <div className="flex flex-col gap-1.5">
-                                <FieldLabel htmlFor="y-input" className="text-muted-foreground">
-                                    <p className="text-white">y:</p>
+                                <FieldLabel htmlFor="y-input" className="text-muted-foreground  text-white">
+                                    y:
                                 </FieldLabel>
                                 <Input
                                 id="y-input"
