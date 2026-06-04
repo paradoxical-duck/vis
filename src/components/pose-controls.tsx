@@ -3,11 +3,11 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { CircleMinus, Plus } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel } from "@/components/ui/field";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export default function PoseControls() {
 
@@ -37,6 +37,10 @@ export default function PoseControls() {
             )
         );
     };
+
+    const deletePose = useCallback((id: string) => {
+        setPoses((prev) => prev.filter((pose) => pose.id !== id));
+    }, []);
     return (
         <div className="flex h-full flex-col">
             <div className="flex justify-center p-4 text-3xl font-bold text-white">
@@ -49,18 +53,21 @@ export default function PoseControls() {
             <ScrollArea className="w-full flex-1 min-h-0 border-t p-4">
                 {poses.map((pose)=>(
                 <div className=" flex text-white" key={pose.id}>
-                    <Accordion type="single" collapsible defaultValue="item-1" className="w-full">
+                    <Accordion type="single" collapsible defaultValue="item-1" className="w-full" >
                         <AccordionItem value="item-1">
                         <AccordionTrigger>
-                            <div className="flex w-full flex-col gap-1 pr-4">
+                            <div className="flex w-full flex-row gap-1 pr-4">
                                 <Input
                                     id={pose.id}
                                     type="text"
                                     placeholder="Pose Name"
                                     defaultValue={pose.name}
-                                    className="w-full transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
+                                    className="w-fit transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
                                     onClick={(e) => e.stopPropagation()}
                                 />
+                                <Button className="w-5 bg-[#11111]" onClick={()=>deletePose(pose.id)}>
+                                    <CircleMinus color="#C00000"/>
+                                </Button>
                             </div>
                         </AccordionTrigger>
 
@@ -76,7 +83,8 @@ export default function PoseControls() {
                                             type="number"
                                             placeholder="X"
                                             className="w-20 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
-                                            defaultValue={pose.x}
+                                            value={pose.x}
+                                            onChange={(e) => updatePose(pose.id, { x: Number(e.target.value) })}
                                         />
                                     </Field>
                                     <Field>
@@ -88,7 +96,8 @@ export default function PoseControls() {
                                             type="number"
                                             placeholder="Y"
                                             className="w-20 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
-                                            defaultValue={pose.y}
+                                            value={pose.y}
+                                            onChange={(e) => updatePose(pose.id, { y: Number(e.target.value) })}
                                         />
                                     </Field>
                                 </div>
@@ -103,7 +112,8 @@ export default function PoseControls() {
                                             type="number"
                                             placeholder="Heading"
                                             className="w-20 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
-                                            defaultValue={pose.heading}
+                                            value={pose.heading}
+                                            onChange={(e) => updatePose(pose.id, { heading: Number(e.target.value) })}
                                         />
                                     </Field>
                                     <Field>
@@ -115,6 +125,8 @@ export default function PoseControls() {
                                             type="number"
                                             placeholder="Radius"
                                             disabled={!pose.arcPose}
+                                            value={pose.radius}
+                                            onChange={(e) => updatePose(pose.id, { radius: Number(e.target.value) })}
                                             className="w-20 transition-all duration-300 ease-in-out focus-visible:border-red-500 focus-visible:ring-red-500 disabled:cursor-not-allowed disabled:opacity-40"
                                         />
                                     </Field>
@@ -155,11 +167,19 @@ export default function PoseControls() {
                                         Global
                                     </button>
                                 </div>
-
+                               {/*tests*/} 
+                                {/* <p>name: {pose.name}</p> 
+                                <p>x: {pose.x}</p> 
+                                <p>y: {pose.y}</p> 
+                                <p>head: {pose.heading}</p> 
+                                <p>radius: {pose.radius}</p> 
+                                <p>arcPose: {pose.arcPose ? "true":"false"}</p> 
+                                <p>isLocal: {pose.local ? "true":"false"}</p>  */}
                             </div>
                         </AccordionContent>
                         </AccordionItem>
                     </Accordion>
+                    
                 </div>
                 ))}
             </ScrollArea> 
