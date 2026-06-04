@@ -9,7 +9,6 @@ export default function Home() {
         orientation="horizontal"
         className="min-h-full max-w-md rounded-lg border min-w-full"
       >
-        <ResizableHandle withHandle />
         <ResizablePanel defaultSize="25%" maxSize="30%" minSize="15%">
           <span>
             <PoseControls/>
