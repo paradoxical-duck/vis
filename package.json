@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@wrksz/themes": "^0.9.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "konva": "^10.3.0",
