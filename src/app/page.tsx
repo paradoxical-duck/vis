@@ -9,7 +9,7 @@ export default function Home() {
         orientation="horizontal"
         className="min-h-full max-w-md rounded-lg border min-w-full"
       >
-        <ResizablePanel defaultSize="25%" maxSize="30%" minSize="23%">
+        <ResizablePanel defaultSize="25%" maxSize="30%" minSize="17%">
           <span>
             <PoseControls/>
           </span>

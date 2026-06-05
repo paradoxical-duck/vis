@@ -19,7 +19,7 @@ export default function PoseControls() {
             
             const newPose: Pose = {
                 id: `pose-${Date.now()}`, // Unique timestamp ensures no duplicate IDs
-                name: `Pose ${nextNumber}`,
+                name: `Pose-${nextNumber}`,
                 x: 0,
                 y: 0,
                 heading: 0,
@@ -56,22 +56,31 @@ export default function PoseControls() {
                 <div className=" flex text-white" key={pose.id}>
                     <Accordion type="single" collapsible defaultValue="item-1" className="w-full" >
                         <AccordionItem value="item-1">
-                        <AccordionTrigger>
-                            <div className="flex w-full flex-row gap-2 mr-2">
-                                <Input
-                                    id={pose.id}
-                                    type="text"
-                                    placeholder="Pose Name"
-                                    defaultValue={pose.name}
-                                    className="w-fit transition-colors mr-2 focus-visible:border-red-500 focus-visible:ring-red-500"
-                                    onClick={(e) => e.stopPropagation()}
-                                />
-                                <Separator orientation="vertical"/>
-                        <Button className="w-5 bg-[#11111] hover:bg-[#11111]" onClick={()=>deletePose(pose.id)}>
-                            <CircleMinus color="#C00000"/>
-                        </Button>
-                            </div>
-                        </AccordionTrigger>
+                        <div className="flex flex-row w-full">
+                            <AccordionTrigger>
+                                <div className="flex w-fit flex-row gap-2 mr-2">
+                                    <Input
+                                        id={pose.id}
+                                        type="text"
+                                        placeholder="Pose Name"
+                                        defaultValue={pose.name}
+                                        className="transition-colors mr-2 focus-visible:border-red-500 focus-visible:ring-red-500"
+                                        onClick={(e) => e.stopPropagation()}
+                                        onChange={(e)=>updatePose(pose.id,{name:e.target.value})}
+                                        onKeyDown={(e) => {
+                                            if (e.key === " ") {
+                                            e.preventDefault();
+                                            }
+                                        }}
+                                    />
+                                    
+                                </div>
+                            </AccordionTrigger>
+                            
+                            <Button className=" ml-2 mt-2 bg-[#11111] hover:bg-[#11111]" onClick={()=>deletePose(pose.id)}>
+                                <CircleMinus color="#C00000"/>
+                            </Button>
+                        </div>
                         <AccordionContent className="flex h-full">
                             <div className="flex flex-col gap-2 ">
                                 
@@ -84,11 +93,25 @@ export default function PoseControls() {
                                             id="x-input"
                                             type="number"
                                             placeholder="X"
+                                            min={-70.5}
+                                            max={70.5}
+                                            onClick={()=>{
+                                                    if(pose.x == 0){
+                                                        updatePose(pose.id,{x:""})
+                                                    }
+                                                }
+                                            }
                                             className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
-                                            value={pose.x === 0 ? "" : pose.x}
+                                            value={pose.x}
                                             onChange={(e) => {
                                                 const val = e.target.value;
-                                                updatePose(pose.id, { x: val === "" || val === "-" ? 0 : Number(val) });
+                                                updatePose(pose.id, { x: Number(val) });
+                                                
+                                                if(Number(val)>=70.5){
+                                                    updatePose(pose.id,{x:70.5})
+                                                }else if(Number(val)<=-70.5){
+                                                     updatePose(pose.id,{x:-70.5})
+                                                }
                                             }}
                                         />
                                     </Field>
@@ -98,13 +121,28 @@ export default function PoseControls() {
                                         </FieldLabel>
                                         <Input
                                             id="y-input"
+                                            min={-70.5}
+                                            max={70.5}
                                             type="number"
                                             placeholder="Y"
                                             className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
-                                            value={pose.y === 0 ? "" : pose.y}
+                                            value={pose.y}
+                                            onClick={()=>{
+                                                    if(pose.y == 0){
+                                                        updatePose(pose.id,{y:""})
+                                                    }
+                                                }
+                                            }
                                             onChange={(e) => {
                                                 const val = e.target.value;
-                                                updatePose(pose.id, { y: val === "" || val === "-" ? 0 : Number(val) });
+                                                updatePose(pose.id, { y: Number(val) });
+
+                                                if(Number(val)>=70.5){
+                                                    updatePose(pose.id,{y:70.5})
+                                                }else if(Number(val)<=-70.5){
+                                                     updatePose(pose.id,{y:-70.5})
+                                                }
+                                                
                                             }}
                                         />
                                     </Field>
@@ -119,11 +157,25 @@ export default function PoseControls() {
                                             id="heading-input"
                                             type="number"
                                             placeholder="Heading"
+                                            min={0}
+                                            max={360}
                                             className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
-                                            value={pose.heading === 0 ? "" : pose.heading}
+                                            value={pose.heading}
+                                            onClick={()=>{
+                                                    if(pose.heading == 0){
+                                                        updatePose(pose.id,{heading:""})
+                                                    }
+                                                }
+                                            }
                                             onChange={(e) => {
                                                 const val = e.target.value;
-                                                updatePose(pose.id, { heading: val === "" || val === "-" ? 0 : Number(val) });
+                                                updatePose(pose.id, { heading: Number(val) });
+                                                
+                                                if(Number(val)>=360){
+                                                    updatePose(pose.id,{heading:360})
+                                                }else if(Number(val)<=0){
+                                                     updatePose(pose.id,{heading:0})
+                                                }
                                             }}
                                         />
                                     </Field>
@@ -136,10 +188,23 @@ export default function PoseControls() {
                                             type="number"
                                             placeholder="Radius"
                                             disabled={!pose.arcPose}
-                                            value={pose.radius === 0 ? "" : pose.radius}
+                                            min={2}
+                                            value={pose.radius}
+                                            onClick={()=>{
+                                                    if(pose.radius == 2){
+                                                        updatePose(pose.id,{radius:""})
+                                                    }
+                                                }
+                                            }
                                             onChange={(e) => {
+
                                                 const val = e.target.value;
-                                                updatePose(pose.id, { radius: val === "" || val === "-" ? 0 : Number(val) });
+                                                updatePose(pose.id, { radius: Number(val) });
+                                                if(Number(val)<=2 && pose.arcPose){
+                                                     updatePose(pose.id,{radius:2})
+                                                }
+                                                
+                                                
                                             }}
                                             className="w-20 h-7 transition-all duration-300 ease-in-out focus-visible:border-red-500 focus-visible:ring-red-500 disabled:cursor-not-allowed disabled:opacity-40"
                                         />
@@ -151,7 +216,10 @@ export default function PoseControls() {
                                     <Switch
                                         id="arc-pose"
                                         checked={pose.arcPose}
-                                        onCheckedChange={(checked: boolean) => updatePose(pose.id, { arcPose: checked })}
+                                        onCheckedChange={(checked: boolean) => {
+                                            updatePose(pose.id, { arcPose: checked })
+                                            updatePose(pose.id,{radius:0})
+                                    }}
                                     />
                                     <label htmlFor="arc-pose" className=" text-xs cursor-pointer select-none">
                                         Arc Pose
@@ -194,10 +262,10 @@ export default function PoseControls() {
                         </AccordionContent>
                         </AccordionItem>
                     </Accordion>
-                    
                 </div>
                 ))}
             </ScrollArea> 
+            
         </div>
     );
 }
