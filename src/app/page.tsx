@@ -21,6 +21,7 @@ export default function Home() {
                   src="./images/decodeField.png" 
                   className="max-h-full max-w-full object-contain" 
                   alt="Decode Field"
+                  draggable="false"
               />
           </div>
         </ResizablePanel>
