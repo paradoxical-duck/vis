@@ -91,13 +91,7 @@ export default function PoseControls
                                             value={pose.x}
                                             onChange={(e) => {
                                                 const val = e.target.value;
-                                                updatePose(pose.id, { x: Number(val) });
-                                                
-                                                if(Number(val)>=70.5){
-                                                    updatePose(pose.id,{x:70.5})
-                                                }else if(Number(val)<=-70.5){
-                                                     updatePose(pose.id,{x:-70.5})
-                                                }
+                                                updatePose(pose.id, { x:Math.max(-70.5, Math.min(70.5, Number(val)))});
                                             }}
                                         />
                                     </Field>
@@ -121,14 +115,7 @@ export default function PoseControls
                                             }
                                             onChange={(e) => {
                                                 const val = e.target.value;
-                                                updatePose(pose.id, { y: Number(val) });
-
-                                                if(Number(val)>=70.5){
-                                                    updatePose(pose.id,{y:70.5})
-                                                }else if(Number(val)<=-70.5){
-                                                     updatePose(pose.id,{y:-70.5})
-                                                }
-                                                
+                                                updatePose(pose.id, { y: Math.max(-70.5, Math.min(70.5, Number(val)))});
                                             }}
                                         />
                                     </Field>
@@ -155,13 +142,7 @@ export default function PoseControls
                                             }
                                             onChange={(e) => {
                                                 const val = e.target.value;
-                                                updatePose(pose.id, { heading: Number(val) });
-                                                
-                                                if(Number(val)>=360){
-                                                    updatePose(pose.id,{heading:360})
-                                                }else if(Number(val)<=0){
-                                                     updatePose(pose.id,{heading:0})
-                                                }
+                                                updatePose(pose.id, { heading: Number(val) % 360 });
                                             }}
                                         />
                                     </Field>
@@ -185,11 +166,8 @@ export default function PoseControls
                                             onChange={(e) => {
 
                                                 const val = e.target.value;
-                                                updatePose(pose.id, { radius: Number(val) });
-                                                if(Number(val)<=2 && pose.arcPose){
-                                                     updatePose(pose.id,{radius:2})
-                                                }
-                                                
+
+                                                updatePose(pose.id, {radius: (Number(val) <= 2 && pose.arcPose) ? 2 : Number(val)})
                                                 
                                             }}
                                             className="w-20 h-7 transition-all duration-300 ease-in-out focus-visible:border-red-500 focus-visible:ring-red-500 disabled:cursor-not-allowed disabled:opacity-40"
