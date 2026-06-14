@@ -11,7 +11,7 @@ import {
     UncontrolledTreeEnvironment, 
     TreeItem 
 } from "react-complex-tree";
-import { useCallback, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from "react";
 import { ChevronDown, ChevronDownCircle, CircleMinus, CirclePlus, GripVertical, Plus} from "lucide-react";
 import { Input } from "./ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
@@ -28,46 +28,23 @@ import {
 } from "@/components/ui/table";
 interface pathControlProps {
     Poses: Pose[];
+    paths: Path[];
+    setPaths: Dispatch<SetStateAction<Path[]>>;
+    addPath: () => void;
+    updatePath: (id: string, updatedFields: Partial<Path>) => void;
+    deletePath: (id: string) => void;
 }
 
-export default function PathControls({ Poses }: pathControlProps) {
+export default function PathControls({ 
+    Poses,
+    paths,
+    setPaths,
+    addPath,
+    updatePath,
+    deletePath  
+ }: pathControlProps) {
     const poses = Poses || [];
-    const [paths, setPaths] = useState<Path[]>([]);
-    const addPath = () => {
-        setPaths((prevPaths) => {
-            const nextNumber = prevPaths.length + 1;
-            
-        
-            const firstPath = prevPaths.length === 0;
-            const lastPath = !firstPath ? prevPaths[prevPaths.length - 1] : null;
-            const prevEndPose = lastPath ? (lastPath.poses.at(-1) || null) : null;
-            const newPath: Path = {
-                id: `path-${Date.now()}`, 
-                name: `Path ${nextNumber}`,
-                poses: [], 
-                callbacks: [{
-                    methodName: "",
-                    distance: "",
-                    distValue: false,
-                }],
-                firstPath: firstPath,
-                prevEndPose: prevEndPose
-            };
 
-            return [...prevPaths, newPath]; 
-        });
-    };
-    const updatePath = (id: string, updatedFields: Partial<Path>) => {
-        setPaths((prev) =>
-            prev.map((path) => 
-            path.id === id ? { ...path, ...updatedFields } : path
-            )
-        );
-    };
-
-    const deletePath = useCallback((id: string) => {
-            setPaths((prev) => prev.filter((path) => path.id !== id));
-    }, []);
     return (
         <div className="flex h-full flex-col">
             <div className="flex justify-center p-4 text-3xl font-bold text-white">
