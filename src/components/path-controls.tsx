@@ -12,25 +12,40 @@ import {
     TreeItem 
 } from "react-complex-tree";
 import { useMemo, useState } from "react";
-import { ChevronDown, ChevronDownCircle, CircleMinus, CirclePlus, Plus} from "lucide-react";
+import { ChevronDown, ChevronDownCircle, CircleMinus, CirclePlus, GripVertical, Plus} from "lucide-react";
 import { Input } from "./ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
 import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "./ui/combobox";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-
+import { Sortable, SortableContent, SortableItem, SortableItemHandle, SortableOverlay } from "./ui/sortable";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 interface pathControlProps {
     Poses: Pose[];
 }
 
-
-
-
-
-
 export default function PathControls({ Poses }: pathControlProps) {
     const poses = Poses || [];
-    const [dropdown,setDropdown] = useState<boolean>(true);
+    const [tricks, setTricks] = useState([
+    { id: "1", title: "The 900"},
+    { id: "2", title: "Indy Backflip"},
+    { id: "3", title: "Pizza Guy"},
+    {
+      id: "4",
+      title: "360 Varial McTwist",
+    },
+  ]);
     
+
+
+
+
     return (
         <div className="flex h-full flex-col">
             <div className="flex justify-center p-4 text-3xl font-bold text-white">
@@ -43,7 +58,6 @@ export default function PathControls({ Poses }: pathControlProps) {
            
             <ScrollArea className="w-full flex-1  min-h-0 border-t p-4">
                 <div className="flex text-white flex-col">
-  
                     <Accordion type="single" collapsible defaultValue="item-1" className="w-full" >
                         <AccordionItem value="item-1">
                         <div className="flex flex-row w-full">
@@ -74,60 +88,45 @@ export default function PathControls({ Poses }: pathControlProps) {
                         <AccordionContent className="flex h-full">
                             <div className="flex flex-col ml-5 w-fit ">
                                 <Accordion type="single" collapsible defaultValue="item-1" className="w-full" >
-                                  <AccordionItem value="item-1">
-                                  <div className="flex flex-row w-fit">
-                                      <AccordionTrigger>
-                                          <div className="flex w-fit text-xs flex-row gap-2 mr-2">
-                                              Control Points
-                                          </div>
-                                      </AccordionTrigger>
-                                      
-                                      <Button className=" ml-2 mt-1 bg-[#11111] hover:bg-[#11111]" >
-                                          <CirclePlus color="#03fc0f"/>
-                                      </Button>
-                                      {/*this top layer can only be implemented when I implement the path interface
-                                      PLS REMEMBER TO DO THIS MEEE*/}
-                                      <Button className="mt-1 mr-5 bg-[#11111] hover:bg-[#11111]" >
-                                        <ChevronDown color="#C00000"/>
-                                      </Button>
-                                  </div>
-                                  <AccordionContent className="flex h-full">
+                                    <AccordionItem value="item-1">
                                     <div className="flex flex-row w-fit">
-                                      <div className="flex">
+                                        <AccordionTrigger>
+                                            <div className="flex w-fit text-xs flex-row gap-2 mr-2">
+                                                Control Points
+                                            </div>
+                                        </AccordionTrigger>
+                                        
+                                        <Button className=" ml-2 mt-1 bg-[#11111] hover:bg-[#11111]" >
+                                            <CirclePlus color="#03fc0f"/>
+                                        </Button>
+                                    </div>
+                                    <AccordionContent className="flex h-full">
+                                    <div className="flex flex-row w-fit">
+                                        <div className="flex">
                                         <Button className="bg-[#11111] hover:bg-[#11111]" >
-                                          <CircleMinus color="#C00000"/>
+                                            <CircleMinus color="#C00000"/>
                                         </Button>
-                                      </div>
-                                      <div className="flex ml-2">
-                                        <Button className="bg-[#11111] hover:bg-[#11111]"
-                                            onClick={() => setDropdown(prev => !prev)}>
-                                          <ChevronDown color={`
-                                            ${dropdown
-                                                ? "#03fc0f"
-                                                : "#C00000"
-                                            }`}/>
-                                        </Button>
-                                      </div>
-                                      <div className="flex flex-row gap-2 ml-4">
-                                        <Combobox items={poses.map((p) => p.name)} openOnInputClick={dropdown}>
-                                          <ComboboxInput placeholder="Select a Pose" />
-                                          <ComboboxContent>
+                                        </div>
+                                        <div className="flex flex-row gap-2">
+                                        <Combobox items={poses.map((p) => p.name)}>
+                                            <ComboboxInput placeholder="Select a Pose" />
+                                            <ComboboxContent>
                                             <ComboboxEmpty>No Poses found.</ComboboxEmpty>
                                             <ComboboxList>
-                                              {(item) => (
+                                                {(item) => (
                                                 <ComboboxItem key={item} value={item}>
-                                                  {item}
+                                                    {item}
                                                 </ComboboxItem>
-                                              )}
+                                                )}
                                             </ComboboxList>
-                                          </ComboboxContent>
+                                            </ComboboxContent>
                                         </Combobox>
-                                      </div>
+                                        </div>
                                     </div>
-                                  </AccordionContent>
-                                  </AccordionItem>
-                              </Accordion>
-                              <Accordion type="single" collapsible defaultValue="item-1" className="w-full" >
+                                    </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
+                                <Accordion type="single" collapsible defaultValue="item-1" className="w-full" >
                                 <AccordionItem value="item-1">
                                 <div className="flex flex-row w-full">
                                     <AccordionTrigger>
@@ -146,13 +145,13 @@ export default function PathControls({ Poses }: pathControlProps) {
                                             <CircleMinus color="#C00000"/>
                                         </Button>
                                         
-                                      
-                                        <div className="flex flex-row items-center gap-0.5">
+                                        
+                                        <div className="flex flex-row items-center w-full gap-0.5">
                                             <Input
                                                 id="callback-input"
                                                 type="number"
-                                                placeholder="Callback"
-                                                className="h-7 min-w-16 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
+                                                placeholder="Dist"
+                                                className="h-7 min-w-16 max-w-20 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
                                             />
                                             
                                             <div className="ml-1">
@@ -160,7 +159,7 @@ export default function PathControls({ Poses }: pathControlProps) {
                                                 
                                                     <ComboboxInput 
                                                         placeholder="" 
-                                                        className="h-7 min-w-14 focus-visible:border-red-500 focus-visible:ring-red-500"
+                                                        className="h-7 min-w-14 max-w-14 focus-visible:border-red-500 focus-visible:ring-red-500"
                                                     />
                                                     <ComboboxContent>
                                                         <ComboboxList>
@@ -180,7 +179,7 @@ export default function PathControls({ Poses }: pathControlProps) {
                                                 id="method-input"
                                                 type="text"
                                                 placeholder="Method"
-                                                className="h-7 min-w-22 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
+                                                className="h-7 min-w-33 max-w-full transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
                                             />
                                         </div>
                                     </div>
@@ -191,9 +190,13 @@ export default function PathControls({ Poses }: pathControlProps) {
                         </AccordionContent>
                         </AccordionItem>
                     </Accordion>
-              </div>
+                </div>
             </ScrollArea>
         </div>
     );
 }
+
+
+
+
 

@@ -12,7 +12,8 @@ export default function Home() {
    poses,
    deletePose,
    addPose,
-   updatePose 
+   updatePose,
+   setPoses,
   }
    = Poses();
 
@@ -24,11 +25,17 @@ export default function Home() {
       >
         <ResizablePanel defaultSize="25%" maxSize="30%" minSize="17%">
           <span>
-            <PoseControls poses={poses} deletePose= {deletePose} addPose = {addPose} updatePose = {updatePose} />
+            <PoseControls
+             poses={poses}
+             deletePose= {deletePose} 
+            addPose = {addPose}
+            updatePose = {updatePose} 
+            setPoses = {setPoses}
+            />
           </span>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize="50%" minSize="40%">
+        <ResizablePanel defaultSize="50%" minSize="30%">
           <div className="flex h-full w-full items-center justify-center overflow-hidden">
               <img 
                   src="./images/decodeField.png" 
@@ -39,7 +46,7 @@ export default function Home() {
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize="25%" maxSize="30%" minSize="22%">
+        <ResizablePanel defaultSize="35%" maxSize="40%" minSize="27%">
           <div className="h-full items-center justify-center h-f">
             <span className="font-semibold">
               <PathControls Poses={poses}/> 

@@ -1,7 +1,7 @@
 interface Callback{
     methodName:string
     distance:number
-
+    distValue:boolean //dist is true, s is false
 }
 
 interface Path{
@@ -9,5 +9,6 @@ interface Path{
     name:string
     poses:Pose[]
     callbacks:Callback[]
-    distValue:boolean  //dist is true, s is false
+    prevEndPose:Pose|null //null for if its the first path
+    firstPath:boolean
 }

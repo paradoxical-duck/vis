@@ -34,5 +34,5 @@ export const Poses=() =>{
     }, []);
 
 
-    return {poses,deletePose,addPose,updatePose};
+    return {poses,deletePose,addPose,updatePose, setPoses};
 }
