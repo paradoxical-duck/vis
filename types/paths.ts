@@ -1,6 +1,6 @@
 interface Callback{
     methodName:string
-    distance:number
+    distance:number|string
     distValue:boolean //dist is true, s is false
 }
 
