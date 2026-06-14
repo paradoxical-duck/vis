@@ -1,8 +1,21 @@
 'use client'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+
+import PathControls from "@/components/path-controls";
+import { Poses } from "@/hooks/use-visualizer";
 import PoseControls from "@/components/pose-controls";
 
+
 export default function Home() {
+  
+  const{
+   poses,
+   deletePose,
+   addPose,
+   updatePose 
+  }
+   = Poses();
+
   return (
     <div className="flex flex-row h-screen p-4">
       <ResizablePanelGroup
@@ -11,7 +24,7 @@ export default function Home() {
       >
         <ResizablePanel defaultSize="25%" maxSize="30%" minSize="17%">
           <span>
-            <PoseControls/>
+            <PoseControls poses={poses} deletePose= {deletePose} addPose = {addPose} updatePose = {updatePose} />
           </span>
         </ResizablePanel>
         <ResizableHandle withHandle />
@@ -26,12 +39,11 @@ export default function Home() {
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize="25%" maxSize="30%" minSize="15%">
-          <div className="h-full items-center justify-center p-6 h-f">
+        <ResizablePanel defaultSize="25%" maxSize="30%" minSize="22%">
+          <div className="h-full items-center justify-center h-f">
             <span className="font-semibold">
-              <div className="flex h-full items-start justify-center p-6 text-3xl text-bold">
-                Paths
-              </div>
+              <PathControls Poses={poses}/> 
+              
             </span>
           </div>
         </ResizablePanel>

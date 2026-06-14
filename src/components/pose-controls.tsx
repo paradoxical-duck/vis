@@ -10,38 +10,24 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { useCallback, useState } from "react";
 import { Separator } from "./ui/separator";
 
-export default function PoseControls() {
 
-    const [poses, setPoses] = useState<Pose[]>([]);
-    const addPose = () => {
-        setPoses((prevPoses) => {
-            const nextNumber = prevPoses.length + 1;
-            
-            const newPose: Pose = {
-                id: `pose-${Date.now()}`, // Unique timestamp ensures no duplicate IDs
-                name: `Pose-${nextNumber}`,
-                x: 0,
-                y: 0,
-                heading: 0,
-                radius: 0,
-                arcPose: false,
-                local: true,
-            };
+interface poseControlProps{
+    deletePose: (id: string) => void;
+    poses: Pose[];
+    addPose: () => void;
+    updatePose: (id: string, updatedFields: Partial<Pose>) => void;
+}
 
-        return [...prevPoses, newPose]; // Returns a brand new array with the new pose at the end
-        });
-    };
-    const updatePose = (id: string, updatedFields: Partial<Pose>) => {
-        setPoses((prev) =>
-            prev.map((pose) => 
-            pose.id === id ? { ...pose, ...updatedFields } : pose
-            )
-        );
-    };
-
-    const deletePose = useCallback((id: string) => {
-        setPoses((prev) => prev.filter((pose) => pose.id !== id));
-    }, []);
+export default function PoseControls
+({
+    poses,
+    deletePose,
+    addPose,
+    updatePose
+    }:poseControlProps) {
+    
+    
+    
     return (
         <div className="flex h-full flex-col">
             <div className="flex justify-center p-4 text-3xl font-bold text-white">
@@ -82,7 +68,7 @@ export default function PoseControls() {
                             </Button>
                         </div>
                         <AccordionContent className="flex h-full">
-                            <div className="flex flex-col gap-2 ">
+                            <div className="flex flex-col gap-2 ml-5">
                                 
                                 <div className="grid grid-cols-2 gap-2">
                                     <Field>
