@@ -68,7 +68,7 @@ export default function PoseControls
                             </Button>
                         </div>
                         <AccordionContent className="flex h-full">
-                            <div className="flex flex-col gap-2 ml-10">
+                            <div className="flex flex-col gap-2 ml-5">
                                 
                                 <div className="grid grid-cols-2 gap-2">
                                     <Field>

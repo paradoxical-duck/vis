@@ -38,7 +38,7 @@ export default function Home() {
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize="25%" maxSize="30%" minSize="15%">
+        <ResizablePanel defaultSize="25%" maxSize="30%" minSize="22%">
           <div className="h-full items-center justify-center h-f">
             <span className="font-semibold">
               <PathControls Poses={poses}/> 
