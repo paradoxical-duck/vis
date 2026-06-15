@@ -45,12 +45,12 @@ export const Paths=()=>{
             
         
             const firstPath = prevPaths.length === 0;
-            const lastPath = !firstPath ? prevPaths[prevPaths.length - 1] : null;
-            const prevEndPose = lastPath ? (lastPath.poses.at(-1) || null) : null;
+            const prevPath = !firstPath ? prevPaths[prevPaths.length - 1] : null;
+            const prevEndPose = prevPath ? (prevPath.controlPoints.at(-1) || null) : null;
             const newPath: Path = {
                 id: `path-${Date.now()}`, 
                 name: `Path ${nextNumber}`,
-                poses: [], 
+                controlPoints: [], 
                 callbacks: [{
                     methodName: "",
                     distance: "",

@@ -11,7 +11,7 @@ import {
     UncontrolledTreeEnvironment, 
     TreeItem 
 } from "react-complex-tree";
-import { Dispatch, SetStateAction, useCallback, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronDown, ChevronDownCircle, CircleMinus, CirclePlus, GripVertical, Plus} from "lucide-react";
 import { Input } from "./ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
@@ -44,7 +44,28 @@ export default function PathControls({
     deletePath  
  }: pathControlProps) {
     const poses = Poses || [];
+    const addControlPoint = (pathId: string, currentPoints: ControlPoints[] = []) => {
+        const newPoint: ControlPoints = {
+            id: `Point${Date.now()}`,
+            poseName: ""
+        };
+        updatePath(pathId, {
+            controlPoints: [...currentPoints, newPoint]
+        });
+    };
 
+    const updateControlPoint = (pathId: string, currentPoints: ControlPoints[], controlPointId: string, updatedFields: Partial<ControlPoints>) => {
+        const updatedPoints = currentPoints.map((point) =>
+            point.id === controlPointId ? { ...point, ...updatedFields } : point
+        );
+        updatePath(pathId, { controlPoints: updatedPoints });
+    };
+
+    const deleteControlPoint = (pathId: string, currentPoints: ControlPoints[], controlPointId: string) => {
+        const filteredPoints = currentPoints.filter((point) => point.id !== controlPointId);
+        updatePath(pathId, { controlPoints: filteredPoints });
+    };
+    
     return (
         <div className="flex h-full flex-col">
             <div className="flex justify-center p-4 text-3xl font-bold text-white">
@@ -121,33 +142,86 @@ export default function PathControls({
                                                             </div>
                                                         </AccordionTrigger>
                                                         
-                                                        <Button className=" ml-2 mt-1 bg-[#11111] hover:bg-[#11111]" >
+                                                        <Button 
+                                                            className="ml-2 mt-1 bg-transparent hover:bg-transparent" 
+                                                            onClick={() => addControlPoint(path.id, path.controlPoints)}
+                                                        >
                                                             <CirclePlus color="#03fc0f"/>
                                                         </Button>
                                                     </div>
-                                                    <AccordionContent className="flex h-full">
-                                                    <div className="flex flex-row w-fit">
-                                                        <div className="flex">
-                                                        <Button className="bg-[#11111] hover:bg-[#11111]" >
-                                                            <CircleMinus color="#C00000"/>
-                                                        </Button>
-                                                        </div>
-                                                        <div className="flex flex-row gap-2">
-                                                        <Combobox items={poses.map((p) => p.name)}>
-                                                            <ComboboxInput placeholder="Select a Pose" />
-                                                            <ComboboxContent>
-                                                            <ComboboxEmpty>No Poses found.</ComboboxEmpty>
-                                                            <ComboboxList>
-                                                                {(item) => (
-                                                                <ComboboxItem key={item} value={item}>
-                                                                    {item}
-                                                                </ComboboxItem>
-                                                                )}
-                                                            </ComboboxList>
-                                                            </ComboboxContent>
-                                                        </Combobox>
-                                                        </div>
-                                                    </div>
+                                                    
+                                                    <AccordionContent className="flex flex-col h-full">
+                                                        <Sortable
+                                                            value={path.controlPoints || []}
+                                                            onValueChange={(newPoints) => updatePath(path.id, { controlPoints: newPoints })}
+                                                            getItemValue={(item) => item.id}
+                                                        >
+                                                        <Table className="">
+                                                            <TableHeader>
+                                                            <TableRow className="bg-accent/50">
+                                                            </TableRow>
+                                                            </TableHeader>
+                                                            <SortableContent asChild>
+                                                            <TableBody>
+                                                                {(path.controlPoints || []).map((controlPoint) => (
+                                                                <SortableItem key={controlPoint.id} value={controlPoint.id} asChild>
+                                                                    <TableRow>
+                                                                    <TableCell className="font-medium"> 
+                                                                        <div className="flex flex-row w-fit" key={controlPoint.id}>
+                                                                            <div className="flex">
+                                                                                <Button 
+                                                                                    className="bg-transparent hover:bg-transparent" 
+                                                                                    onClick={() => deleteControlPoint(path.id, path.controlPoints, controlPoint.id)}
+                                                                                >
+                                                                                    <CircleMinus color="#C00000"/>
+                                                                                </Button>
+                                                                            </div>
+                                                                            <div className="flex flex-row">
+                                                                                <Combobox 
+                                                                                    items={poses.map((p) => p.name)}
+                                                                                    onValueChange={(value) => {
+                                                                                        updateControlPoint(path.id, path.controlPoints, controlPoint.id, { 
+                                                                                            poseName: (value as string) ?? "" 
+                                                                                        });
+                                                                                    }}
+                                                                                >
+
+                                                                                    <ComboboxInput 
+                                                                                        placeholder="Select a Pose" 
+                                                                                        value={controlPoint.poseName || ""} 
+                                                                                    />
+                                                                                    <ComboboxContent>
+                                                                                        <ComboboxEmpty>No Poses found.</ComboboxEmpty>
+                                                                                        <ComboboxList>
+                                                                                            {(item) => (
+                                                                                                <ComboboxItem key={item} value={item}>
+                                                                                                    {item}
+                                                                                                </ComboboxItem>
+                                                                                            )}
+                                                                                        </ComboboxList>
+                                                                                    </ComboboxContent>
+                                                                                </Combobox>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </TableCell>
+                                                                    <TableCell className="w-fit">
+                                                                        <SortableItemHandle asChild>
+                                                                        <Button variant="ghost" size="icon" className="size-8">
+                                                                            <GripVertical className="h-4 w-4" />
+                                                                        </Button>
+                                                                        </SortableItemHandle>
+                                                                    </TableCell>
+                                                                    </TableRow>
+                                                                </SortableItem>
+                                                                ))}
+                                                            </TableBody>
+                                                            </SortableContent>
+                                                        </Table>
+                                                        <SortableOverlay>
+                                                            <div className="size-full rounded-none bg-primary/10" />
+                                                        </SortableOverlay>
+                                                        </Sortable>
                                                     </AccordionContent>
                                                     </AccordionItem>
                                                 </Accordion>
