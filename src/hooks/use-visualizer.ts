@@ -51,11 +51,7 @@ export const Paths=()=>{
                 id: `path-${Date.now()}`, 
                 name: `Path ${nextNumber}`,
                 controlPoints: [], 
-                callbacks: [{
-                    methodName: "",
-                    distance: "",
-                    distValue: false,
-                }],
+                callbacks: [],
                 firstPath: firstPath,
                 prevEndPose: prevEndPose
             };

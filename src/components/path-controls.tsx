@@ -51,7 +51,28 @@ export default function PathControls({
     updateControlPoint  
  }: pathControlProps) {
     const poses = Poses || [];
-    
+
+    const addCallback = (pathId: string, currentCallbacks: Callback[] = []) => {
+        const newCallback: Callback = {
+            id: `Point${Date.now()}`,
+            methodName:"",
+            distance:"",
+            distValue:undefined
+        };
+        updatePath(pathId, {
+            callbacks: [...currentCallbacks, newCallback]
+        });
+    };
+    const updateCallback = (pathId: string, currentCallbacks: Callback[],callbackId: string, updatedFields: Partial<Callback>) => {
+        const updatedCallbacks = currentCallbacks.map((callback) =>
+            callback.id === callbackId ? { ...callback, ...updatedFields } : callback
+        );
+        updatePath(pathId, { callbacks: updatedCallbacks });
+    };
+    const deletecallback = (pathId: string, currentCallbacks: Callback[], controlPointId: string) => {
+        const filteredPoints = currentCallbacks.filter((callback) => callback.id !== controlPointId);
+        updatePath(pathId, { callbacks: filteredPoints });
+    };
     return (
         <div className="flex h-full flex-col">
             <div className="flex justify-center p-4 text-3xl font-bold text-white">
@@ -220,54 +241,91 @@ export default function PathControls({
                                                         </div>
                                                     </AccordionTrigger>
                                                     
-                                                    <Button className=" ml-2 mt-1 bg-[#11111] hover:bg-[#11111]" >
+                                                    <Button className=" ml-2 mt-1 bg-[#11111] hover:bg-[#11111]" onClick={() => addCallback(path.id, path.callbacks)}>
                                                         <CirclePlus color="#03fc0f"/>
                                                     </Button>
                                                 </div>
-                                                <AccordionContent className="flex h-full">
-                                                    <div className="flex flex-row items-center gap-2 text-2xl">
-                                                        <Button className="bg-[#111111] hover:bg-[#111111]" >
-                                                            <CircleMinus color="#C00000"/>
-                                                        </Button>
+                                                <AccordionContent className="flex h-full flex-col">
+                                                    {(path.callbacks || []).map((callback) => (
                                                         
-                                                        
-                                                        <div className="flex flex-row items-center w-full gap-0.5">
-                                                            <Input
-                                                                id="callback-input"
-                                                                type="number"
-                                                                placeholder="Dist"
-                                                                className="h-7 min-w-16 max-w-20 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
-                                                            />
+                                                        <div className="flex flex-row mt-2 items-center gap-2 text-2xl"key = {callback.id}>
+                                                            <Button className="bg-transparent hover:bg-transparent" onClick={()=>deletecallback(path.id, path.callbacks, callback.id)}>
+                                                                <CircleMinus color="#C00000"/>
+                                                            </Button>
                                                             
-                                                            <div className="ml-1">
-                                                                <Combobox items={["S","D"]}>
-                                                                
-                                                                    <ComboboxInput 
-                                                                        placeholder="" 
-                                                                        className="h-7 min-w-14 max-w-14 focus-visible:border-red-500 focus-visible:ring-red-500"
+                                                            
+                                                                <div className="flex flex-row items-center w-full gap-0.5">
+                                                                    <Input
+                                                                        id="callback-input"
+                                                                        type="number"
+                                                                        placeholder="Dist"
+                                                                        value={callback.distance}
+                                                                        onChange={(e)=>
+                                                                            {
+                                                                            updateCallback(path.id, path.callbacks, callback.id, { 
+                                                                                    distance: e.target.value
+                                                                                });
+                                                                            }
+                                                                        }
+                                                                        onClick={()=>{
+                                                                            if(callback.distance == 0){
+                                                                                updateCallback(path.id, path.callbacks, callback.id, { 
+                                                                                        distance: "" 
+                                                                                    });
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        
+                        
+                                                                        className="h-7 min-w-16 max-w-20 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
                                                                     />
-                                                                    <ComboboxContent>
-                                                                        <ComboboxList>
-                                                                            {(item) => (
-                                                                                <ComboboxItem key={item} value={item}>
-                                                                                    {item}
-                                                                                </ComboboxItem>
-                                                                            )}
-                                                                        </ComboboxList>
-                                                                    </ComboboxContent>
-                                                                </Combobox>
+                                                                    
+                                                                    <div className="ml-1">
+                                                                        <Combobox items={["S","D"]}
+                                                                        onValueChange={(value) => {
+                                                                            updateCallback(path.id, path.callbacks, callback.id, { 
+                                                                                distValue: value =="S"
+                                                                                ?false
+                                                                                :true
+                                                                            });
+                                                                        }}
+                                                                        >
+                                                                        
+                                                                            <ComboboxInput 
+                                                                                placeholder="" 
+                                                                                className="h-7 min-w-14 max-w-14 focus-visible:border-red-500 focus-visible:ring-red-500"
+                                                                            />
+                                                                            <ComboboxContent>
+                                                                                <ComboboxList>
+                                                                                    {(item) => (
+                                                                                        <ComboboxItem key={item} value={item}>
+                                                                                            {item}
+                                                                                        </ComboboxItem>
+                                                                                    )}
+                                                                                </ComboboxList>
+                                                                            </ComboboxContent>
+                                                                        </Combobox>
+                                                                    </div>
+                                                                    
+                                                                    <div className="self-center transform -translate-y-0.5 text-white">:</div>
+                                                                    
+                                                                    <Input
+                                                                        id="method-input"
+                                                                        type="text"
+                                                                        value={callback.methodName}
+                                                                        onChange={(e)=>
+                                                                            {
+                                                                            updateCallback(path.id, path.callbacks, callback.id, { 
+                                                                                    methodName: e.target.value
+                                                                                });
+                                                                            }
+                                                                        }
+                                                                        placeholder="Method"
+                                                                        className="h-7 min-w-33 max-w-full transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                            
-                                                            <div className="self-center transform -translate-y-0.5 text-white">:</div>
-                                                            
-                                                            <Input
-                                                                id="method-input"
-                                                                type="text"
-                                                                placeholder="Method"
-                                                                className="h-7 min-w-33 max-w-full transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
-                                                            />
-                                                        </div>
-                                                    </div>
+                                                    ))}
                                                 </AccordionContent>
                                                 </AccordionItem>
                                             </Accordion>

@@ -1,7 +1,8 @@
 interface Callback{
+    id:string
     methodName:string
     distance:number|string
-    distValue:boolean //dist is true, s is false
+    distValue:boolean | undefined//dist is true, s is false, undefined is default
 }
 
 interface ControlPoints{
