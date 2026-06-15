@@ -2,7 +2,7 @@
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 
 import PathControls from "@/components/path-controls";
-import { Poses } from "@/hooks/use-visualizer";
+import { Paths, Poses } from "@/hooks/use-visualizer";
 import PoseControls from "@/components/pose-controls";
 
 
@@ -17,6 +17,20 @@ export default function Home() {
   }
    = Poses();
 
+   const{
+    paths,
+    setPaths,
+    addPath,
+    updatePath,
+    deletePath,
+   addControlPoint,
+   updateControlPoint,
+   deleteControlPoint,
+   addCallback,
+   updateCallback,
+   deleteCallback
+   } = Paths();
+
   return (
     <div className="flex flex-row h-screen p-4">
       <ResizablePanelGroup
@@ -26,11 +40,11 @@ export default function Home() {
         <ResizablePanel defaultSize="25%" maxSize="30%" minSize="17%">
           <span>
             <PoseControls
-             poses={poses}
-             deletePose= {deletePose} 
-            addPose = {addPose}
-            updatePose = {updatePose} 
-            setPoses = {setPoses}
+              poses={poses}
+              deletePose= {deletePose} 
+              addPose = {addPose}
+              updatePose = {updatePose} 
+              setPoses = {setPoses}
             />
           </span>
         </ResizablePanel>
@@ -49,7 +63,20 @@ export default function Home() {
         <ResizablePanel defaultSize="35%" maxSize="40%" minSize="27%">
           <div className="h-full items-center justify-center h-f">
             <span className="font-semibold">
-              <PathControls Poses={poses}/> 
+              <PathControls 
+              Poses={poses}
+              paths={paths}
+              setPaths={setPaths}
+              addPath={addPath}
+              updatePath={updatePath}
+              deletePath={deletePath}
+              addControlPoint={addControlPoint}
+              updateControlPoint={updateControlPoint}
+              deleteControlPoint={deleteControlPoint}
+              addCallback={addCallback}
+              updateCallback={updateCallback}
+              deleteCallback={deleteCallback}
+              /> 
               
             </span>
           </div>

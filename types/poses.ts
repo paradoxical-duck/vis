@@ -5,6 +5,7 @@ interface Pose {
     y:number| string,
     heading:number| string
     radius: number| string
-    arcPose:boolean
-    local:boolean
+    arcPose:boolean|undefined
+    local:boolean|undefined
 }
+
