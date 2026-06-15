@@ -33,9 +33,12 @@ interface pathControlProps {
     addPath: () => void;
     updatePath: (id: string, updatedFields: Partial<Path>) => void;
     deletePath: (id: string) => void;
-   deleteControlPoint: (pathId: string, currentPoints: ControlPoints[], controlPointId: string) => void;
+    deleteControlPoint: (pathId: string, currentPoints: ControlPoints[], controlPointId: string) => void;
     addControlPoint: (pathId: string, currentPoints?: ControlPoints[]) => void;
     updateControlPoint: (pathId: string, currentPoints: ControlPoints[], controlPointId: string, updatedFields: Partial<ControlPoints>) => void;
+    addCallback: (pathId: string, currentCallbacks?: Callback[]) => void;
+    updateCallback: (pathId: string, currentCallbacks: Callback[], callbackId: string, updatedFields: Partial<Callback>) => void;
+    deleteCallback: (pathId: string, currentCallbacks: Callback[], controlPointId: string) => void;
 
 }
 
@@ -48,31 +51,14 @@ export default function PathControls({
     deletePath,
     deleteControlPoint,
     addControlPoint,
-    updateControlPoint  
+    updateControlPoint,
+    addCallback,
+    updateCallback,
+    deleteCallback  
  }: pathControlProps) {
     const poses = Poses || [];
 
-    const addCallback = (pathId: string, currentCallbacks: Callback[] = []) => {
-        const newCallback: Callback = {
-            id: `Point${Date.now()}`,
-            methodName:"",
-            distance:"",
-            distValue:undefined
-        };
-        updatePath(pathId, {
-            callbacks: [...currentCallbacks, newCallback]
-        });
-    };
-    const updateCallback = (pathId: string, currentCallbacks: Callback[],callbackId: string, updatedFields: Partial<Callback>) => {
-        const updatedCallbacks = currentCallbacks.map((callback) =>
-            callback.id === callbackId ? { ...callback, ...updatedFields } : callback
-        );
-        updatePath(pathId, { callbacks: updatedCallbacks });
-    };
-    const deletecallback = (pathId: string, currentCallbacks: Callback[], controlPointId: string) => {
-        const filteredPoints = currentCallbacks.filter((callback) => callback.id !== controlPointId);
-        updatePath(pathId, { callbacks: filteredPoints });
-    };
+    
     return (
         <div className="flex h-full flex-col">
             <div className="flex justify-center p-4 text-3xl font-bold text-white">
@@ -249,7 +235,7 @@ export default function PathControls({
                                                     {(path.callbacks || []).map((callback) => (
                                                         
                                                         <div className="flex flex-row mt-2 items-center gap-2 text-2xl"key = {callback.id}>
-                                                            <Button className="bg-transparent hover:bg-transparent" onClick={()=>deletecallback(path.id, path.callbacks, callback.id)}>
+                                                            <Button className="bg-transparent hover:bg-transparent" onClick={()=>deleteCallback(path.id, path.callbacks, callback.id)}>
                                                                 <CircleMinus color="#C00000"/>
                                                             </Button>
                                                             

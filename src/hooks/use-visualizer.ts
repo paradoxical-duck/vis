@@ -49,7 +49,7 @@ export const Paths=()=>{
             const prevEndPose = prevPath ? (prevPath.controlPoints.at(-1) || null) : null;
             const newPath: Path = {
                 id: `path-${Date.now()}`, 
-                name: `Path ${nextNumber}`,
+                name: `Path${nextNumber}`,
                 controlPoints: [], 
                 callbacks: [],
                 firstPath: firstPath,
@@ -95,6 +95,27 @@ export const Paths=()=>{
         updatePath(pathId, { controlPoints: filteredPoints });
     };
 
+    const addCallback = (pathId: string, currentCallbacks: Callback[] = []) => {
+        const newCallback: Callback = {
+            id: `Point${Date.now()}`,
+            methodName:"",
+            distance:"",
+            distValue:undefined
+        };
+        updatePath(pathId, {
+            callbacks: [...currentCallbacks, newCallback]
+        });
+    };
+    const updateCallback = (pathId: string, currentCallbacks: Callback[],callbackId: string, updatedFields: Partial<Callback>) => {
+        const updatedCallbacks = currentCallbacks.map((callback) =>
+            callback.id === callbackId ? { ...callback, ...updatedFields } : callback
+        );
+        updatePath(pathId, { callbacks: updatedCallbacks });
+    };
+    const deleteCallback = (pathId: string, currentCallbacks: Callback[], controlPointId: string) => {
+        const filteredPoints = currentCallbacks.filter((callback) => callback.id !== controlPointId);
+        updatePath(pathId, { callbacks: filteredPoints });
+    };
 
-    return{paths,setPaths,addPath,updatePath,deletePath,addControlPoint,updateControlPoint,deleteControlPoint}
+    return{paths,setPaths,addPath,updatePath,deletePath,addControlPoint,updateControlPoint,deleteControlPoint,addCallback,updateCallback,deleteCallback}
 }

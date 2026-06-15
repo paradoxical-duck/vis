@@ -25,7 +25,10 @@ export default function Home() {
     deletePath,
    addControlPoint,
    updateControlPoint,
-   deleteControlPoint
+   deleteControlPoint,
+   addCallback,
+   updateCallback,
+   deleteCallback
    } = Paths();
 
   return (
@@ -67,10 +70,12 @@ export default function Home() {
               addPath={addPath}
               updatePath={updatePath}
               deletePath={deletePath}
-              
               addControlPoint={addControlPoint}
               updateControlPoint={updateControlPoint}
               deleteControlPoint={deleteControlPoint}
+              addCallback={addCallback}
+              updateCallback={updateCallback}
+              deleteCallback={deleteCallback}
               /> 
               
             </span>
