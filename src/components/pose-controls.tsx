@@ -11,17 +11,6 @@ import { Dispatch, SetStateAction } from "react";
 import { Sortable, SortableContent, SortableItem, SortableItemHandle, SortableOverlay } from "./ui/sortable";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
-export interface Pose {
-  id: string;
-  name: string;
-  x: number | string;
-  y: number | string;
-  heading: number | string;
-  radius: number | string;
-  arcPose: boolean;
-  local: boolean;
-}
-
 interface PoseControlProps {
   deletePose: (id: string) => void;
   poses: Pose[];
