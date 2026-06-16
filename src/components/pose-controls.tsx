@@ -3,12 +3,21 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { CircleMinus, Plus } from "lucide-react";
+import { CircleMinus, GripVertical, Plus } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel } from "@/components/ui/field";
-import { useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import { Separator } from "./ui/separator";
+import { Sortable, SortableContent, SortableItem, SortableItemHandle, SortableOverlay } from "./ui/sortable";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 
 interface poseControlProps{
@@ -16,6 +25,7 @@ interface poseControlProps{
     poses: Pose[];
     addPose: () => void;
     updatePose: (id: string, updatedFields: Partial<Pose>) => void;
+    setPoses: Dispatch<SetStateAction<Pose[]>>;
 }
 
 export default function PoseControls
@@ -23,10 +33,9 @@ export default function PoseControls
     poses,
     deletePose,
     addPose,
-    updatePose
+    updatePose,
+    setPoses
     }:poseControlProps) {
-    
-    
     
     return (
         <div className="flex h-full flex-col">
@@ -176,58 +185,69 @@ export default function PoseControls
                                 </div>
                              
 
-                                <div className="flex items-center space-x-2">
-                                    <Switch
-                                        id="arc-pose"
-                                        checked={pose.arcPose}
-                                        onCheckedChange={(checked: boolean) => {
-                                            updatePose(pose.id, { arcPose: checked })
-                                            updatePose(pose.id,{radius:0})
-                                    }}
-                                    />
-                                    <label htmlFor="arc-pose" className=" text-xs cursor-pointer select-none">
-                                        Arc Pose
-                                    </label>
-                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                    <Switch
+                                                        id="arc-pose"
+                                                        checked={pose.arcPose}
+                                                        onCheckedChange={(checked: boolean) => {
+                                                            updatePose(pose.id, { arcPose: checked })
+                                                            updatePose(pose.id,{radius:0})
+                                                    }}
+                                                    />
+                                                    <label htmlFor="arc-pose" className=" text-xs cursor-pointer select-none">
+                                                        Arc Pose
+                                                    </label>
+                                                </div>
 
-                                <div className="flex w-full gap-2">
-                                    <button
-                                        type="button"
-                                        onClick={() => updatePose(pose.id, { local: true })}
-                                        className={`flex-1 rounded-md justify-center text-center text-xs h-7 font-semibold text-white transition-colors ${
-                                            pose.local
-                                                ? "bg-red-600"
-                                                : "bg-zinc-800 hover:bg-zinc-700"
-                                        }`}
-                                    >
-                                        Local
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => updatePose(pose.id, { local: false })}
-                                        className={`flex-1 rounded-md justify-center text-center text-xs h-7 font-semibold text-white transition-colors ${
-                                            !pose.local
-                                                ? "bg-red-600"
-                                                : "bg-zinc-800 hover:bg-zinc-700"
-                                        }`}
-                                    >
-                                        Global
-                                    </button>
+                                                <div className="flex w-full gap-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => updatePose(pose.id, { local: true })}
+                                                        className={`flex-1 rounded-md justify-center text-center text-xs h-7 font-semibold text-white transition-colors ${
+                                                            pose.local
+                                                                ? "bg-red-600"
+                                                                : "bg-zinc-800 hover:bg-zinc-700"
+                                                        }`}
+                                                    >
+                                                        Local
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => updatePose(pose.id, { local: false })}
+                                                        className={`flex-1 rounded-md justify-center text-center text-xs h-7 font-semibold text-white transition-colors ${
+                                                            !pose.local
+                                                                ? "bg-red-600"
+                                                                : "bg-zinc-800 hover:bg-zinc-700"
+                                                        }`}
+                                                    >
+                                                        Global
+                                                    </button>
+                                                </div>
+                                            {/*tests*/} 
+                                                {/* <p>name: {pose.name}</p> 
+                                                <p>x: {pose.x}</p> 
+                                                <p>y: {pose.y}</p> 
+                                                <p>head: {pose.heading}</p> 
+                                                <p>radius: {pose.radius}</p> 
+                                                <p>arcPose: {pose.arcPose ? "true":"false"}</p> 
+                                                <p>isLocal: {pose.local ? "true":"false"}</p>  */}
+                                            </div>
+                                        </AccordionContent>
+                                        </AccordionItem>
+                                    </Accordion>
                                 </div>
-                               {/*tests*/} 
-                                {/* <p>name: {pose.name}</p> 
-                                <p>x: {pose.x}</p> 
-                                <p>y: {pose.y}</p> 
-                                <p>head: {pose.heading}</p> 
-                                <p>radius: {pose.radius}</p> 
-                                <p>arcPose: {pose.arcPose ? "true":"false"}</p> 
-                                <p>isLocal: {pose.local ? "true":"false"}</p>  */}
-                            </div>
-                        </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </div>
-                ))}
+                            </TableCell>
+                            </TableRow>
+                        </SortableItem>
+                        ))}
+                    </TableBody>
+                    </SortableContent>
+                </Table>
+                <SortableOverlay>
+                    <div className="size-full rounded-none bg-primary/10" />
+                </SortableOverlay>
+                </Sortable>
+                
             </ScrollArea> 
             
         </div>

@@ -1,13 +1,20 @@
 interface Callback{
+    id:string
     methodName:string
-    distance:number
+    distance:number|string
+    distValue:boolean | undefined//dist is true, s is false, undefined is default
+}
 
+interface ControlPoints{
+    id: string;
+    poseName: string;
 }
 
 interface Path{
     id:string
     name:string
-    poses:Pose[]
+    controlPoints:ControlPoints[]
     callbacks:Callback[]
-    distValue:boolean  //dist is true, s is false
+    prevEndPose:ControlPoints|null //null for if its the first path
+    firstPath:boolean
 }
