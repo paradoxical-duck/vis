@@ -47,187 +47,143 @@ export default function PoseControls
                 Add Pose
             </Button>
             <ScrollArea className="w-full flex-1 min-h-0 border-t p-4">
-                <Sortable
-                value={poses}
-                onValueChange={setPoses}
-                getItemValue={(item) => item.id}
-                >
-                <Table className="">
-                    <TableHeader>
-                    <TableRow className="bg-accent/50">
-                    </TableRow>
-                    </TableHeader>
-                    <SortableContent asChild>
-                    <TableBody>
-                        {poses.map((pose) => (
-                        <SortableItem key={pose.id} value={pose.id} asChild>
-                            <TableRow>
-                            <TableCell className="w-fit">
-                                <SortableItemHandle asChild>
-                                <Button variant="ghost" size="icon" className="size-8">
-                                    <GripVertical className="h-4 w-4" />
-                                </Button>
-                                </SortableItemHandle>
-                            </TableCell>
-                            <TableCell className="font-medium"> 
-                                <div className=" flex text-white">
-                                    <Accordion type="single" collapsible defaultValue="item-1" className="w-full" >
-                                        <AccordionItem value="item-1">
-                                        <div className="flex flex-row w-full">
-                                            <AccordionTrigger>
-                                                <div className="flex w-fit flex-row gap-2 mr-2">
-                                                    <Input
-                                                        id={pose.id}
-                                                        type="text"
-                                                        placeholder="Pose Name"
-                                                        defaultValue={pose.name}
-                                                        className="transition-colors mr-2 focus-visible:border-red-500 focus-visible:ring-red-500"
-                                                        onClick={(e) => e.stopPropagation()}
-                                                        onChange={(e)=>updatePose(pose.id,{name:e.target.value})}
-                                                        onKeyDown={(e) => {
-                                                            if (e.key === " ") {
-                                                            e.preventDefault();
-                                                            }
-                                                        }}
-                                                    />
-                                                    
-                                                </div>
-                                            </AccordionTrigger>
-                                            
-                                            <Button className=" ml-2 mt-2 bg-[#11111] hover:bg-[#11111]" onClick={()=>deletePose(pose.id)}>
-                                                <CircleMinus color="#C00000"/>
-                                            </Button>
-                                        </div>
-                                        <AccordionContent className="flex h-full">
-                                            <div className="flex flex-col gap-2 ml-5">
+                {poses.map((pose)=>(
+                <div className=" flex text-white" key={pose.id}>
+                    <Accordion type="single" collapsible defaultValue="item-1" className="w-full" >
+                        <AccordionItem value="item-1">
+                        <div className="flex flex-row w-full">
+                            <AccordionTrigger>
+                                <div className="flex w-fit flex-row gap-2 mr-2">
+                                    <Input
+                                        id={pose.id}
+                                        type="text"
+                                        placeholder="Pose Name"
+                                        defaultValue={pose.name}
+                                        className="transition-colors mr-2 focus-visible:border-red-500 focus-visible:ring-red-500"
+                                        onClick={(e) => e.stopPropagation()}
+                                        onChange={(e)=>updatePose(pose.id,{name:e.target.value})}
+                                        onKeyDown={(e) => {
+                                            if (e.key === " ") {
+                                            e.preventDefault();
+                                            }
+                                        }}
+                                    />
+                                    
+                                </div>
+                            </AccordionTrigger>
+                            
+                            <Button className=" ml-2 mt-2 bg-[#11111] hover:bg-[#11111]" onClick={()=>deletePose(pose.id)}>
+                                <CircleMinus color="#C00000"/>
+                            </Button>
+                        </div>
+                        <AccordionContent className="flex h-full">
+                            <div className="flex flex-col gap-2 ml-5">
+                                
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Field>
+                                        <FieldLabel htmlFor="x-input" className="text-white text-xs">
+                                            X:
+                                        </FieldLabel>
+                                        <Input
+                                            id="x-input"
+                                            type="number"
+                                            placeholder="X"
+                                            min={-70.5}
+                                            max={70.5}
+                                            onClick={()=>{
+                                                    if(pose.x == 0){
+                                                        updatePose(pose.id,{x:""})
+                                                    }
+                                                }
+                                            }
+                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
+                                            value={pose.x}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                updatePose(pose.id, { x:Math.max(-70.5, Math.min(70.5, Number(val)))});
+                                            }}
+                                        />
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="y-input" className="text-white text-xs">
+                                            Y:
+                                        </FieldLabel>
+                                        <Input
+                                            id="y-input"
+                                            min={-70.5}
+                                            max={70.5}
+                                            type="number"
+                                            placeholder="Y"
+                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
+                                            value={pose.y}
+                                            onClick={()=>{
+                                                    if(pose.y == 0){
+                                                        updatePose(pose.id,{y:""})
+                                                    }
+                                                }
+                                            }
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                updatePose(pose.id, { y: Math.max(-70.5, Math.min(70.5, Number(val)))});
+                                            }}
+                                        />
+                                    </Field>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Field>
+                                        <FieldLabel htmlFor="heading-input" className="text-white text-xs">
+                                            Heading:
+                                        </FieldLabel>
+                                        <Input
+                                            id="heading-input"
+                                            type="number"
+                                            placeholder="Heading"
+                                            min={0}
+                                            max={360}
+                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
+                                            value={pose.heading}
+                                            onClick={()=>{
+                                                    if(pose.heading == 0){
+                                                        updatePose(pose.id,{heading:""})
+                                                    }
+                                                }
+                                            }
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                updatePose(pose.id, { heading: Number(val) % 360 });
+                                            }}
+                                        />
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="radius-input" className="text-white text-xs">
+                                            Radius:
+                                        </FieldLabel>
+                                        <Input
+                                            id="radius-input"
+                                            type="number"
+                                            placeholder="Radius"
+                                            disabled={!pose.arcPose}
+                                            min={2}
+                                            value={pose.radius}
+                                            onClick={()=>{
+                                                    if(pose.radius == 2){
+                                                        updatePose(pose.id,{radius:""})
+                                                    }
+                                                }
+                                            }
+                                            onChange={(e) => {
+
+                                                const val = e.target.value;
+
+                                                updatePose(pose.id, {radius: (Number(val) <= 2 && pose.arcPose) ? 2 : Number(val)})
                                                 
-                                                <div className="grid grid-cols-2 gap-2">
-                                                    <Field>
-                                                        <FieldLabel htmlFor="x-input" className="text-white text-xs">
-                                                            X:
-                                                        </FieldLabel>
-                                                        <Input
-                                                            id="x-input"
-                                                            type="number"
-                                                            placeholder="X"
-                                                            min={-70.5}
-                                                            max={70.5}
-                                                            onClick={()=>{
-                                                                    if(pose.x == 0){
-                                                                        updatePose(pose.id,{x:""})
-                                                                    }
-                                                                }
-                                                            }
-                                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
-                                                            value={pose.x}
-                                                            onChange={(e) => {
-                                                                const val = e.target.value;
-                                                                updatePose(pose.id, { x: Number(val) });
-                                                                
-                                                                if(Number(val)>=70.5){
-                                                                    updatePose(pose.id,{x:70.5})
-                                                                }else if(Number(val)<=-70.5){
-                                                                    updatePose(pose.id,{x:-70.5})
-                                                                }
-                                                            }}
-                                                        />
-                                                    </Field>
-                                                    <Field>
-                                                        <FieldLabel htmlFor="y-input" className="text-white text-xs">
-                                                            Y:
-                                                        </FieldLabel>
-                                                        <Input
-                                                            id="y-input"
-                                                            min={-70.5}
-                                                            max={70.5}
-                                                            type="number"
-                                                            placeholder="Y"
-                                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
-                                                            value={pose.y}
-                                                            onClick={()=>{
-                                                                    if(pose.y == 0){
-                                                                        updatePose(pose.id,{y:""})
-                                                                    }
-                                                                }
-                                                            }
-                                                            onChange={(e) => {
-                                                                const val = e.target.value;
-                                                                updatePose(pose.id, { y: Number(val) });
-
-                                                                if(Number(val)>=70.5){
-                                                                    updatePose(pose.id,{y:70.5})
-                                                                }else if(Number(val)<=-70.5){
-                                                                    updatePose(pose.id,{y:-70.5})
-                                                                }
-                                                                
-                                                            }}
-                                                        />
-                                                    </Field>
-                                                </div>
-
-                                                <div className="grid grid-cols-2 gap-2">
-                                                    <Field>
-                                                        <FieldLabel htmlFor="heading-input" className="text-white text-xs">
-                                                            Heading:
-                                                        </FieldLabel>
-                                                        <Input
-                                                            id="heading-input"
-                                                            type="number"
-                                                            placeholder="Heading"
-                                                            min={0}
-                                                            max={360}
-                                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
-                                                            value={pose.heading}
-                                                            onClick={()=>{
-                                                                    if(pose.heading == 0){
-                                                                        updatePose(pose.id,{heading:""})
-                                                                    }
-                                                                }
-                                                            }
-                                                            onChange={(e) => {
-                                                                const val = e.target.value;
-                                                                updatePose(pose.id, { heading: Number(val) });
-                                                                
-                                                                if(Number(val)>=360){
-                                                                    updatePose(pose.id,{heading:360})
-                                                                }else if(Number(val)<=0){
-                                                                    updatePose(pose.id,{heading:0})
-                                                                }
-                                                            }}
-                                                        />
-                                                    </Field>
-                                                    <Field>
-                                                        <FieldLabel htmlFor="radius-input" className="text-white text-xs">
-                                                            Radius:
-                                                        </FieldLabel>
-                                                        <Input
-                                                            id="radius-input"
-                                                            type="number"
-                                                            placeholder="Radius"
-                                                            disabled={!pose.arcPose}
-                                                            min={2}
-                                                            value={pose.radius}
-                                                            onClick={()=>{
-                                                                    if(pose.radius == 2){
-                                                                        updatePose(pose.id,{radius:""})
-                                                                    }
-                                                                }
-                                                            }
-                                                            onChange={(e) => {
-
-                                                                const val = e.target.value;
-                                                                updatePose(pose.id, { radius: Number(val) });
-                                                                if(Number(val)<=2 && pose.arcPose){
-                                                                    updatePose(pose.id,{radius:2})
-                                                                }
-                                                                
-                                                                
-                                                            }}
-                                                            className="w-20 h-7 transition-all duration-300 ease-in-out focus-visible:border-red-500 focus-visible:ring-red-500 disabled:cursor-not-allowed disabled:opacity-40"
-                                                        />
-                                                    </Field>
-                                                </div>
-                                            
+                                            }}
+                                            className="w-20 h-7 transition-all duration-300 ease-in-out focus-visible:border-red-500 focus-visible:ring-red-500 disabled:cursor-not-allowed disabled:opacity-40"
+                                        />
+                                    </Field>
+                                </div>
+                             
 
                                                 <div className="flex items-center space-x-2">
                                                     <Switch
