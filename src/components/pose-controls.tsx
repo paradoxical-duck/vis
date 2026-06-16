@@ -36,7 +36,7 @@ export default function PoseControls
     updatePose,
     setPoses
     }:poseControlProps) {
-    
+
     return (
         <div className="flex h-full flex-col">
             <div className="flex justify-center p-4 text-3xl font-bold text-white">
@@ -54,34 +54,34 @@ export default function PoseControls
                 >
                 <Table className="">
                     <TableHeader>
-                    <TableRow className="bg-accent/50">
+                    <TableRow className="border-none">
                     </TableRow>
                     </TableHeader>
                     <SortableContent asChild>
                     <TableBody>
                         {poses.map((pose) => (
                         <SortableItem key={pose.id} value={pose.id} asChild>
-                            <TableRow>
+                            <TableRow className="bg-black hover:bg-black border-b border-zinc-800">
                             <TableCell className="w-fit">
                                 <SortableItemHandle asChild>
-                                <Button variant="ghost" size="icon" className="size-8">
-                                    <GripVertical className="h-4 w-4" />
+                                <Button variant="ghost" size="icon" className="size-8 cursor-grab active:cursor-grabbing text-zinc-500 hover:text-white hover:bg-transparent">
+                                    <GripVertical className="h-5 w-5" />
                                 </Button>
                                 </SortableItemHandle>
                             </TableCell>
-                            <TableCell className="font-medium"> 
+                            <TableCell className="font-medium">
                                 <div className=" flex text-white">
                                     <Accordion type="single" collapsible defaultValue="item-1" className="w-full" >
-                                        <AccordionItem value="item-1">
+                                        <AccordionItem value="item-1" className="border-none">
                                         <div className="flex flex-row w-full">
-                                            <AccordionTrigger>
+                                            <AccordionTrigger className="hover:no-underline">
                                                 <div className="flex w-fit flex-row gap-2 mr-2">
                                                     <Input
                                                         id={pose.id}
                                                         type="text"
                                                         placeholder="Pose Name"
                                                         defaultValue={pose.name}
-                                                        className="transition-colors mr-2 focus-visible:border-red-500 focus-visible:ring-red-500"
+                                                        className="transition-colors mr-2 focus-visible:border-red-500 focus-visible:ring-red-500 bg-black"
                                                         onClick={(e) => e.stopPropagation()}
                                                         onChange={(e)=>updatePose(pose.id,{name:e.target.value})}
                                                         onKeyDown={(e) => {
@@ -90,17 +90,17 @@ export default function PoseControls
                                                             }
                                                         }}
                                                     />
-                                                    
+
                                                 </div>
                                             </AccordionTrigger>
-                                            
-                                            <Button className=" ml-2 mt-2 bg-[#11111] hover:bg-[#11111]" onClick={()=>deletePose(pose.id)}>
+
+                                            <Button className=" ml-2 mt-2 bg-transparent hover:bg-transparent" onClick={()=>deletePose(pose.id)}>
                                                 <CircleMinus color="#C00000"/>
                                             </Button>
                                         </div>
                                         <AccordionContent className="flex h-full">
                                             <div className="flex flex-col gap-2 ml-5">
-                                                
+
                                                 <div className="grid grid-cols-2 gap-2">
                                                     <Field>
                                                         <FieldLabel htmlFor="x-input" className="text-white text-xs">
@@ -118,12 +118,12 @@ export default function PoseControls
                                                                     }
                                                                 }
                                                             }
-                                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
+                                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500 bg-black"
                                                             value={pose.x}
                                                             onChange={(e) => {
                                                                 const val = e.target.value;
                                                                 updatePose(pose.id, { x: Number(val) });
-                                                                
+
                                                                 if(Number(val)>=70.5){
                                                                     updatePose(pose.id,{x:70.5})
                                                                 }else if(Number(val)<=-70.5){
@@ -142,7 +142,7 @@ export default function PoseControls
                                                             max={70.5}
                                                             type="number"
                                                             placeholder="Y"
-                                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
+                                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500 bg-black"
                                                             value={pose.y}
                                                             onClick={()=>{
                                                                     if(pose.y == 0){
@@ -159,7 +159,7 @@ export default function PoseControls
                                                                 }else if(Number(val)<=-70.5){
                                                                     updatePose(pose.id,{y:-70.5})
                                                                 }
-                                                                
+
                                                             }}
                                                         />
                                                     </Field>
@@ -176,7 +176,7 @@ export default function PoseControls
                                                             placeholder="Heading"
                                                             min={0}
                                                             max={360}
-                                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
+                                                            className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500 bg-black"
                                                             value={pose.heading}
                                                             onClick={()=>{
                                                                     if(pose.heading == 0){
@@ -187,7 +187,7 @@ export default function PoseControls
                                                             onChange={(e) => {
                                                                 const val = e.target.value;
                                                                 updatePose(pose.id, { heading: Number(val) });
-                                                                
+
                                                                 if(Number(val)>=360){
                                                                     updatePose(pose.id,{heading:360})
                                                                 }else if(Number(val)<=0){
@@ -220,14 +220,14 @@ export default function PoseControls
                                                                 if(Number(val)<=2 && pose.arcPose){
                                                                     updatePose(pose.id,{radius:2})
                                                                 }
-                                                                
-                                                                
+
+
                                                             }}
-                                                            className="w-20 h-7 transition-all duration-300 ease-in-out focus-visible:border-red-500 focus-visible:ring-red-500 disabled:cursor-not-allowed disabled:opacity-40"
+                                                            className="w-20 h-7 transition-all duration-300 ease-in-out focus-visible:border-red-500 focus-visible:ring-red-500 disabled:cursor-not-allowed disabled:opacity-40 bg-black"
                                                         />
                                                     </Field>
                                                 </div>
-                                            
+
 
                                                 <div className="flex items-center space-x-2">
                                                     <Switch
@@ -267,14 +267,6 @@ export default function PoseControls
                                                         Global
                                                     </button>
                                                 </div>
-                                            {/*tests*/} 
-                                                {/* <p>name: {pose.name}</p> 
-                                                <p>x: {pose.x}</p> 
-                                                <p>y: {pose.y}</p> 
-                                                <p>head: {pose.heading}</p> 
-                                                <p>radius: {pose.radius}</p> 
-                                                <p>arcPose: {pose.arcPose ? "true":"false"}</p> 
-                                                <p>isLocal: {pose.local ? "true":"false"}</p>  */}
                                             </div>
                                         </AccordionContent>
                                         </AccordionItem>
@@ -288,12 +280,12 @@ export default function PoseControls
                     </SortableContent>
                 </Table>
                 <SortableOverlay>
-                    <div className="size-full rounded-none bg-primary/10" />
+                    <div className="size-full rounded-md bg-zinc-900 border border-zinc-700 shadow-xl opacity-90" />
                 </SortableOverlay>
                 </Sortable>
-                
-            </ScrollArea> 
-            
+
+            </ScrollArea>
+
         </div>
     );
 }
