@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@wrksz/themes/next";
+import PageNavbar from "@/components/page-navbar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,9 +26,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <ThemeProvider forcedTheme="dark" attribute="class" >
-        <body className="min-h-full flex flex-col font-mono">{children}</body>
-      </ThemeProvider>
+      <body className="min-h-full flex flex-col font-mono bg-black text-white">
+        <ThemeProvider forcedTheme="dark" attribute="class" >
+          {}
+          <PageNavbar />
+
+          {}
+          <main className="flex-1 min-h-0 w-full">
+            {children}
+          </main>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
