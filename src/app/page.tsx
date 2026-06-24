@@ -6,7 +6,6 @@ import { Paths, Poses } from "@/hooks/use-visualizer";
 import PoseControls from "@/components/pose-controls";
 
 export default function Home() {
-
   const {
    poses,
    deletePose,

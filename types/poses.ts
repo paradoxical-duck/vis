@@ -1,11 +1,10 @@
 interface Pose {
-    id:string
-    name:string
-    x:number| string
-    y:number| string
-    heading:number| string
-    radius: number| string
-    arcPose:boolean|undefined
-    local:boolean|undefined
+    id: number
+    name: string
+    x: number
+    y: number
+    heading: number
+    radius: number
+    arcPose: boolean
+    local: boolean
 }
-

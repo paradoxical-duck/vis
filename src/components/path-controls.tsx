@@ -16,14 +16,14 @@ interface PathControlProps {
     paths: Path[];
     setPaths: Dispatch<SetStateAction<Path[]>>;
     addPath: () => void;
-    updatePath: (id: string, updatedFields: Partial<Path>) => void;
-    deletePath: (id: string) => void;
-    deleteControlPoint: (pathId: string, currentPoints: ControlPoint[], controlPointId: string) => void;
-    addControlPoint: (pathId: string, currentPoints?: ControlPoint[]) => void;
-    updateControlPoint: (pathId: string, currentPoints: ControlPoint[], controlPointId: string, updatedFields: Partial<ControlPoint>) => void;
-    addCallback: (pathId: string, currentCallbacks?: Callback[]) => void;
-    updateCallback: (pathId: string, currentCallbacks: Callback[], callbackId: string, updatedFields: Partial<Callback>) => void;
-    deleteCallback: (pathId: string, currentCallbacks: Callback[], controlPointId: string) => void;
+    updatePath: (id: number, updatedFields: Partial<Path>) => void;
+    deletePath: (id: number) => void;
+    deleteControlPoint: (pathId: number, currentPoints: ControlPoint[], controlPointId: number) => void;
+    addControlPoint: (pathId: number, currentPoints?: ControlPoint[]) => void;
+    updateControlPoint: (pathId: number, currentPoints: ControlPoint[], controlPointId: number, updatedFields: Partial<ControlPoint>) => void;
+    addCallback: (pathId: number, currentCallbacks?: Callback[]) => void;
+    updateCallback: (pathId: number, currentCallbacks: Callback[], callbackId: number, updatedFields: Partial<Callback>) => void;
+    deleteCallback: (pathId: number, currentCallbacks: Callback[], callbackId: number) => void;
 }
 
 export default function PathControls({ 
@@ -43,11 +43,9 @@ export default function PathControls({
     poses = poses || [];
 
     return (
-        //THE POSES ARE COOKED, THE CONTROL POINTS INTERFACE ONLY TAKE POSENAMES RIGHT NOW, IF 2 THINGS WITH THE SAME NAME SHOW UP, UR COOKED
         <div className="flex h-full flex-col">
             <Button className="flex mt-4 mx-4" onClick={addPath}>
-                <Plus/>
-                Add Path
+                <Plus/> Add Path
             </Button>
            
             <ScrollArea className="w-full flex-1 min-h-0 p-4">
@@ -58,8 +56,7 @@ export default function PathControls({
                 >
                 <Table className="">
                     <TableHeader>
-                    <TableRow className="bg-accent/50">
-                    </TableRow>
+                        <TableRow className="bg-accent/50" />
                     </TableHeader>
                     <SortableContent asChild>
                     <TableBody>
@@ -88,11 +85,11 @@ export default function PathControls({
                                                         placeholder="Pose Name"
                                                         value={path.name}
                                                         className="transition-colors mr-2 focus-visible:border-red-500 focus-visible:ring-red-500"
-                                                        onChange={(e)=>updatePath(path.id,{name:e.target.value})}
+                                                        onChange={(e) => updatePath(path.id, {name: e.target.value})}
                                                         onClick={(e) => e.stopPropagation()}
                                                         onKeyDown={(e) => {
                                                             if (e.key === " ") {
-                                                            e.preventDefault();
+                                                                e.preventDefault();
                                                             }
                                                         }}
                                                     />
@@ -152,33 +149,25 @@ export default function PathControls({
                                                                                     <CircleMinus color="#C00000"/>
                                                                                 </Button>
                                                                             </div>
-                                                                            {controlPoint.poseId === undefined
-                                                                            ?"false"
-                                                                            :"true"}
                                                                             <div className="flex flex-row">
                                                                                 <Combobox 
                                                                                     items={poses.map((p) => p)}
                                                                                     onValueChange={(value) => {
                                                                                         updateControlPoint(path.id, path.controlPoints, controlPoint.id, { 
-                                                                                            poseName: (value as string) ?? "" 
+                                                                                            poseId: (value as number) || -1
                                                                                         });
                                                                                     }}
                                                                                 >
 
-                                                                                    <ComboboxInput 
-                                                                                        placeholder="Select a Pose" 
-                                                                                    
-                                                                                    />
+                                                                                    <ComboboxInput placeholder="Select a Pose" />
                                                                                     <ComboboxContent>
-                                                                                        <ComboboxEmpty>No Poses found.</ComboboxEmpty>
+                                                                                        <ComboboxEmpty>No poses found</ComboboxEmpty>
                                                                                         <ComboboxList>
-                                                                                                {(item) => (
-                                                                                                    <ComboboxItem key={item.id} value={item.name}
-                                                                                                    >
-                                                                                                        {item.name}
-                                                                                                        
-                                                                                                    </ComboboxItem>
-                                                                                                )}
+                                                                                            {(pose: Pose) => (
+                                                                                                <ComboboxItem key={pose.id} value={pose.id}>
+                                                                                                    {pose.name}
+                                                                                                </ComboboxItem>
+                                                                                            )}
                                                                                         </ComboboxList>
                                                                                     </ComboboxContent>
                                                                                 </Combobox>
@@ -233,38 +222,29 @@ export default function PathControls({
                                                                         id="callback-input"
                                                                         type="number"
                                                                         placeholder="Dist"
-                                                                        value={callback.distance}
-                                                                        onChange={(e)=>
-                                                                            {
+                                                                        value={callback.value}
+                                                                        onChange={(e) => {
                                                                             updateCallback(path.id, path.callbacks, callback.id, { 
-                                                                                    distance: e.target.value
-                                                                                });
+                                                                                value: parseFloat(e.target.value) || 0
+                                                                            });
+                                                                        }}
+                                                                        onClick={() => {
+                                                                            if (callback.value == 0) {
+                                                                                updateCallback(path.id, path.callbacks, callback.id, { value: 0 });
                                                                             }
-                                                                        }
-                                                                        onClick={()=>{
-                                                                            if(callback.distance == 0){
-                                                                                updateCallback(path.id, path.callbacks, callback.id, { 
-                                                                                        distance: "" 
-                                                                                    });
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        
-                        
+                                                                        }}
                                                                         className="h-7 min-w-16 max-w-20 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500"
                                                                     />
                                                                     
                                                                     <div className="ml-1">
-                                                                        <Combobox items={["S","D"]}
-                                                                        onValueChange={(value) => {
-                                                                            updateCallback(path.id, path.callbacks, callback.id, { 
-                                                                                distValue: value =="S"
-                                                                                ?false
-                                                                                :true
-                                                                            });
-                                                                        }}
+                                                                        <Combobox 
+                                                                            items={["S", "D"]}
+                                                                            onValueChange={(value) => {
+                                                                                updateCallback(path.id, path.callbacks, callback.id, { 
+                                                                                    distValue: value === "D"
+                                                                                });
+                                                                            }}
                                                                         >
-                                                                        
                                                                             <ComboboxInput 
                                                                                 placeholder="" 
                                                                                 className="h-7 min-w-14 max-w-14 focus-visible:border-red-500 focus-visible:ring-red-500"
@@ -286,11 +266,11 @@ export default function PathControls({
                                                                     <Input
                                                                         id="method-input"
                                                                         type="text"
-                                                                        value={callback.methodName}
+                                                                        value={callback.method}
                                                                         onChange={(e)=>
                                                                             {
                                                                             updateCallback(path.id, path.callbacks, callback.id, { 
-                                                                                    methodName: e.target.value
+                                                                                    method: e.target.value
                                                                                 });
                                                                             }
                                                                         }

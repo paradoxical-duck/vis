@@ -12,10 +12,10 @@ import { Sortable, SortableContent, SortableItem, SortableItemHandle, SortableOv
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 interface PoseControlProps {
-  deletePose: (id: string) => void;
+  deletePose: (id: number) => void;
   poses: Pose[];
   addPose: () => void;
-  updatePose: (id: string, updatedFields: Partial<Pose>) => void;
+  updatePose: (id: number, updatedFields: Partial<Pose>) => void;
   setPoses: Dispatch<SetStateAction<Pose[]>>;
 }
 
@@ -44,7 +44,7 @@ export default function PoseControls({
                     <TableRow className="border-b border-zinc-800">
                       <TableCell className="p-2">
                         <Accordion type="single" collapsible className="w-full">
-                          <AccordionItem value={pose.id} className="border-none">
+                          <AccordionItem value={pose.id.toString()} className="border-none">
                             <div className="flex flex-row items-center w-full justify-between gap-4 py-1 text-white">
                               <div className="flex items-center gap-2 flex-1">
                                 <SortableItemHandle>
@@ -92,12 +92,12 @@ export default function PoseControls({
                                       max={70.5}
                                       className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500 bg-zinc-900"
                                       value={pose.x}
-                                      onClick={() => {
-                                        if (pose.x === 0) updatePose(pose.id, { x: "" });
-                                      }}
                                       onChange={(e) => {
                                         const val = e.target.value;
-                                        updatePose(pose.id, { x: val === "" ? "" : Math.max(-70.5, Math.min(70.5, Number(val))) });
+                                        updatePose(pose.id, { x: val === "" ? 0 : Math.max(-70.5, Math.min(70.5, parseFloat(val))) });
+                                      }}
+                                      onClick={() => {
+                                        if (pose.x === 0) updatePose(pose.id, { x: 0 });
                                       }}
                                     />
                                   </Field>
@@ -115,11 +115,11 @@ export default function PoseControls({
                                       className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500 bg-zinc-900"
                                       value={pose.y}
                                       onClick={() => {
-                                        if (pose.y === 0) updatePose(pose.id, { y: "" });
+                                        if (pose.y === 0) updatePose(pose.id, { y: 0 });
                                       }}
                                       onChange={(e) => {
                                         const val = e.target.value;
-                                        updatePose(pose.id, { y: val === "" ? "" : Math.max(-70.5, Math.min(70.5, Number(val))) });
+                                        updatePose(pose.id, { y: val === "" ? 0 : Math.max(-70.5, Math.min(70.5, parseFloat(val))) });
                                       }}
                                     />
                                   </Field>
@@ -139,11 +139,11 @@ export default function PoseControls({
                                       className="w-20 h-7 transition-colors focus-visible:border-red-500 focus-visible:ring-red-500 bg-zinc-900"
                                       value={pose.heading}
                                       onClick={() => {
-                                        if (pose.heading === 0) updatePose(pose.id, { heading: "" });
+                                        if (pose.heading === 0) updatePose(pose.id, { heading: 0 });
                                       }}
                                       onChange={(e) => {
                                         const val = e.target.value;
-                                        updatePose(pose.id, { heading: val === "" ? "" : Number(val) % 360 });
+                                        updatePose(pose.id, { heading: val === "" ? 0 : Number(val) % 360 });
                                       }}
                                     />
                                   </Field>
@@ -161,11 +161,11 @@ export default function PoseControls({
                                       className="w-20 h-7 transition-all duration-300 ease-in-out focus-visible:border-red-500 focus-visible:ring-red-500 disabled:cursor-not-allowed disabled:opacity-40 bg-zinc-900"
                                       value={pose.radius}
                                       onClick={() => {
-                                        if (pose.radius === 2) updatePose(pose.id, { radius: "" });
+                                        if (pose.radius === 2) updatePose(pose.id, { radius: 0 });
                                       }}
                                       onChange={(e) => {
                                         const val = e.target.value;
-                                        updatePose(pose.id, { radius: val === "" ? "" : (Number(val) <= 2 && pose.arcPose) ? 2 : Number(val) });
+                                        updatePose(pose.id, { radius: val === "" ? 0 : (Number(val) <= 2 && pose.arcPose) ? 2 : Number(val) });
                                       }}
                                     />
                                   </Field>
