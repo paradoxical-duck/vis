@@ -1,33 +1,29 @@
-// src/components/page-navbar.tsx
-import { DiscordSVG, GithubSVG, YoutubeSVG } from "./media-icons";
+import { DiscordSVG, GithubSVG } from "./media-icons";
+
 export default function PageNavbar() {
   return (
-    <nav className="w-full h-14 border-b border-zinc-800 bg-black flex items-center justify-between px-6 z-50">
-      {/* Left side: Logo */}
-      <div className="flex items-center gap-2 text-white">
-        <img src="/logo_icon.svg" alt="Apex Pathing" className="mr-1 size-7" />
-        <span className="font-mono font-bold tracking-tight">Apex Pathing</span>
+    <div className="flex w-full h-14 border border-border items-center justify-between px-6 z-50">
+      <div className="flex items-center gap-2">
+        <img src="./logo_icon.svg" alt="Logo" className="mr-1 size-7" />
+        <span className="font-bold">Apex Pathing</span>
       </div>
 
-      {/* Right side: Links */}
-      <div className="flex items-center gap-6 font-mono text-sm text-zinc-400">
+      <div className="flex items-center gap-6 text-sm">
         <a
           href="https://github.com/ApexPathing"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-white transition-colors"
         >
-          GitHub
+          <GithubSVG className="w-5 h-5" />
         </a>
         <a
           href="https://discord.gg/qpP4CXaHDg"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-white transition-colors"
         >
-          Discord
+          <DiscordSVG className="w-5 h-5" />
         </a>
       </div>
-    </nav>
+    </div>
   );
 }

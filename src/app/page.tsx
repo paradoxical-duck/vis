@@ -30,8 +30,7 @@ export default function Home() {
   } = Paths();
 
   return (
-    // Replaced h-screen with calc(100vh - navbar_height) so it fits perfectly on your monitor
-    <div className="flex flex-row h-[calc(100vh-56px)] p-4">
+    <div className="flex flex-row h-[calc(100vh-104px)]">
       <ResizablePanelGroup
         orientation="horizontal"
         className="min-h-full max-w-md rounded-lg border min-w-full"
@@ -63,7 +62,7 @@ export default function Home() {
           <div className="h-full items-center justify-center">
             <span className="font-semibold">
               <PathControls
-                Poses={poses}
+                poses={poses}
                 paths={paths}
                 setPaths={setPaths}
                 addPath={addPath}

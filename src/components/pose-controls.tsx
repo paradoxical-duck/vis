@@ -24,17 +24,13 @@ export default function PoseControls({
 }: PoseControlProps) {
   
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex justify-center p-4 text-3xl font-bold text-white">
-        Poses
-      </div>
-      
-      <Button className="flex m-4" onClick={addPose}>
+    <div className="flex h-full flex-col">      
+      <Button className="flex mt-4 mx-4" onClick={addPose}>
         <Plus className="mr-2 h-4 w-4" />
         Add Pose
       </Button>
       
-      <ScrollArea className="w-full flex-1 min-h-0 border-t p-4">
+      <ScrollArea className="w-full flex-1 min-h-0 p-4">
         <Sortable 
           value={poses} 
           onValueChange={setPoses}
@@ -175,38 +171,40 @@ export default function PoseControls({
                                   </Field>
                                 </div>
 
-                                <div className="flex items-center space-x-2 mt-1">
-                                  <Switch
-                                    id={`arc-pose-${pose.id}`}
-                                    checked={pose.arcPose}
-                                    onCheckedChange={(checked: boolean) => {
-                                      updatePose(pose.id, { arcPose: checked, radius: checked ? 2 : 0 });
-                                    }}
-                                  />
-                                  <label htmlFor={`arc-pose-${pose.id}`} className="text-xs cursor-pointer select-none">
-                                    Arc Pose
-                                  </label>
-                                </div>
+                                <div className="flex flex-row gap-4">
+                                  <div className="flex items-center space-x-2 mt-1">
+                                    <Switch
+                                      id={`arc-pose-${pose.id}`}
+                                      checked={pose.arcPose}
+                                      onCheckedChange={(checked: boolean) => {
+                                        updatePose(pose.id, { arcPose: checked, radius: checked ? 2 : 0 });
+                                      }}
+                                    />
+                                    <label htmlFor={`arc-pose-${pose.id}`} className="text-xs cursor-pointer select-none">
+                                      Arc Pose
+                                    </label>
+                                  </div>
 
-                                <div className="flex w-full gap-2 mt-1">
-                                  <button
-                                    type="button"
-                                    onClick={() => updatePose(pose.id, { local: true })}
-                                    className={`flex-1 rounded-md justify-center text-center text-xs h-7 font-semibold text-white transition-colors ${
-                                      pose.local ? "bg-red-600" : "bg-zinc-800 hover:bg-zinc-700"
-                                    }`}
-                                  >
-                                    Local
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => updatePose(pose.id, { local: false })}
-                                    className={`flex-1 rounded-md justify-center text-center text-xs h-7 font-semibold text-white transition-colors ${
-                                      !pose.local ? "bg-red-600" : "bg-zinc-800 hover:bg-zinc-700"
-                                    }`}
-                                  >
-                                    Global
-                                  </button>
+                                  <div className="flex flex-1 w-full gap-2 mt-1">
+                                    <button
+                                      type="button"
+                                      onClick={() => updatePose(pose.id, { local: true })}
+                                      className={`flex-1 rounded-md justify-center text-center text-xs h-7 font-semibold text-white transition-colors ${
+                                        pose.local ? "bg-red-600" : "bg-zinc-800 hover:bg-zinc-700"
+                                      }`}
+                                    >
+                                      Local
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => updatePose(pose.id, { local: false })}
+                                      className={`flex-1 rounded-md justify-center text-center text-xs h-7 font-semibold text-white transition-colors ${
+                                        !pose.local ? "bg-red-600" : "bg-zinc-800 hover:bg-zinc-700"
+                                      }`}
+                                    >
+                                      Global
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </AccordionContent>

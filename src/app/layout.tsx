@@ -26,13 +26,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-mono bg-black text-white">
+      <body className="flex flex-col min-h-full font-mono p-4">
         <ThemeProvider forcedTheme="dark" attribute="class" >
-          {}
           <PageNavbar />
-
-          {}
-          <main className="flex-1 min-h-0 w-full">
+          <main className="flex-1 min-h-0 w-full mt-4">
             {children}
           </main>
         </ThemeProvider>
