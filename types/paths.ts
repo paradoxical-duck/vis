@@ -5,16 +5,17 @@ interface Callback{
     distValue:boolean | undefined//dist is true, s is false, undefined is default
 }
 
-interface ControlPoints{
+interface ControlPoint{
     id: string;
+    poseId:string|undefined;
     poseName: string;
 }
 
 interface Path{
     id:string
     name:string
-    controlPoints:ControlPoints[]
+    controlPoints:ControlPoint[]
     callbacks:Callback[]
-    prevEndPose:ControlPoints|null //null for if its the first path
+    prevEndPose:ControlPoint|null //null for if its the first path
     firstPath:boolean
 }

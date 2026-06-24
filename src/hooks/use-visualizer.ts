@@ -7,7 +7,7 @@ export const Poses=() =>{
         setPoses((prevPoses) => {
             const nextNumber = prevPoses.length + 1;
             
-            const newPose: Pose = {
+            const newPose:Pose = {
                 id: `pose-${Date.now()}`,
                 name: `Pose${nextNumber}`,
                 x: 0,
@@ -73,24 +73,25 @@ export const Paths=()=>{
 
 
 
-    const addControlPoint = (pathId: string, currentPoints: ControlPoints[] = []) => {
-        const newPoint: ControlPoints = {
+    const addControlPoint = (pathId: string, currentPoints: ControlPoint[] = []) => {
+        const newPoint: ControlPoint = {
             id: `Point${Date.now()}`,
-            poseName: ""
+            poseName: "",
+            poseId:undefined
         };
         updatePath(pathId, {
             controlPoints: [...currentPoints, newPoint]
         });
     };
 
-    const updateControlPoint = (pathId: string, currentPoints: ControlPoints[], controlPointId: string, updatedFields: Partial<ControlPoints>) => {
+    const updateControlPoint = (pathId: string, currentPoints: ControlPoint[], controlPointId: string, updatedFields: Partial<ControlPoint>) => {
         const updatedPoints = currentPoints.map((point) =>
             point.id === controlPointId ? { ...point, ...updatedFields } : point
         );
         updatePath(pathId, { controlPoints: updatedPoints });
     };
 
-    const deleteControlPoint = (pathId: string, currentPoints: ControlPoints[], controlPointId: string) => {
+    const deleteControlPoint = (pathId: string, currentPoints: ControlPoint[], controlPointId: string) => {
         const filteredPoints = currentPoints.filter((point) => point.id !== controlPointId);
         updatePath(pathId, { controlPoints: filteredPoints });
     };

@@ -44,7 +44,7 @@ export default function PoseControls({
             <SortableContent asChild>
               <TableBody>
                 {poses.map((pose) => (
-                  <SortableItem key={pose.id} value={pose.id} asChild>
+                  <SortableItem key={pose.id} value={pose.id} className="hover:transparent" asChild>
                     <TableRow className="border-b border-zinc-800">
                       <TableCell className="p-2">
                         <Accordion type="single" collapsible className="w-full">
@@ -73,11 +73,10 @@ export default function PoseControls({
                                 </AccordionTrigger>
                                 
                                 <Button 
-                                  variant="ghost" 
-                                  className="bg-[#111111] hover:bg-zinc-900 h-8 w-8 p-0" 
-                                  onClick={() => deletePose(pose.id)}
+                                    className="bg-transparent hover:bg-transparent" 
+                                    onClick={()=>deletePose(pose.id)}
                                 >
-                                  <CircleMinus className="h-5 w-5" color="#C00000" />
+                                    <CircleMinus color="#C00000"/>
                                 </Button>
                               </div>
                             </div>
