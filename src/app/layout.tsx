@@ -28,8 +28,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     >
       <body className="flex flex-col min-h-full font-mono p-4">
         <ThemeProvider forcedTheme="dark" attribute="class" >
+          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center backdrop-blur-md p-6 text-center xl:hidden">
+            <p className="px-4 text-lg font-medium">
+              Your screen resolution is too small to use the visualizer. Please resize the window or use a larger screen.
+            </p>
+          </div>
+
           <PageNavbar />
-          <main className="flex-1 min-h-0 w-full mt-4">
+          <main className="flex-1 min-h-0 w-full mt-4 z-0">
             {children}
           </main>
         </ThemeProvider>

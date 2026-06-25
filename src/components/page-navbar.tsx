@@ -2,7 +2,7 @@ import { DiscordSVG, GithubSVG } from "./media-icons";
 
 export default function PageNavbar() {
   return (
-    <div className="flex w-full h-14 border border-border items-center justify-between px-6 z-50">
+    <div className="flex w-full h-14 border border-border items-center justify-between px-6">
       <div className="flex items-center gap-2">
         <img src="./logo_icon.svg" alt="Logo" className="mr-2 size-7" />
         <span className="font-bold">Apex Pathing</span>
